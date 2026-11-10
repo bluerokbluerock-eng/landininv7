@@ -4,6 +4,21 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const RESIDENCE_COUNTRIES = new Map(Object.entries({
+  Argentina: 'AR', Bolivia: 'BO', Canadá: 'CA', Chile: 'CL', Colombia: 'CO',
+  'Costa Rica': 'CR', Cuba: 'CU', Ecuador: 'EC', 'El Salvador': 'SV',
+  España: 'ES', 'Estados Unidos': 'US', Francia: 'FR', Guatemala: 'GT',
+  'Guinea Ecuatorial': 'GQ', Honduras: 'HN', Italia: 'IT', México: 'MX',
+  Nicaragua: 'NI', Panamá: 'PA', Paraguay: 'PY', Perú: 'PE',
+  'República Dominicana': 'DO', Uruguay: 'UY', Venezuela: 'VE',
+}));
+const PHONE_COUNTRIES = new Map(Object.entries({
+  '+54': 'AR', '+591': 'BO', '+56': 'CL', '+57': 'CO', '+506': 'CR',
+  '+53': 'CU', '+593': 'EC', '+503': 'SV', '+34': 'ES', '+33': 'FR',
+  '+502': 'GT', '+240': 'GQ', '+504': 'HN', '+39': 'IT', '+52': 'MX',
+  '+505': 'NI', '+507': 'PA', '+595': 'PY', '+51': 'PE', '+598': 'UY',
+  '+58': 'VE',
+}));
 const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.avif': 'image/avif', '.woff': 'font/woff', '.woff2': 'font/woff2', '.ico': 'image/x-icon' };
 const ROOT_FILES = new Set(['index.html', 'styles.css', 'script.js', 'leads-client.js', 'favicon.ico']);
 
@@ -25,10 +40,38 @@ function cleanLead(data) {
     const adultCutoff = `${Number(today.slice(0, 4)) - 18}${today.slice(4)}`;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(lead.dob) || !Number.isFinite(+birth) || birth.toISOString().slice(0, 10) !== lead.dob || lead.dob < '1900-01-01' || lead.dob > adultCutoff) throw new Error('invalid');
   }
-  return lead;
+  const residenceCountryCode = RESIDENCE_COUNTRIES.get(lead.country);
+  if (!residenceCountryCode) throw new Error('invalid');
+  const [prefix] = lead.phone.split(' ');
+  const phoneCountry = prefix === '+1' && ['CA', 'US', 'DO'].includes(data.phoneCountry)
+    ? data.phoneCountry
+    : PHONE_COUNTRIES.get(prefix);
+  return {
+    requestId: lead.requestId,
+    name: lead.name,
+    email: lead.email,
+    phone: lead.phone,
+    phoneCountry,
+    residenceCountryCode,
+    birthDate: lead.dob || undefined,
+    consent: true,
+  };
 }
 
-export function createLandingServer({ root, landing, env = process.env, fetchImpl = fetch }) {
+function crmEndpoint(baseUrl) {
+  try {
+    const base = new URL(baseUrl);
+    if (!['http:', 'https:'].includes(base.protocol) || base.username || base.password || base.search || base.hash) return null;
+    if (!['/', '/api/v1', '/api/v1/'].includes(base.pathname)) return null;
+    return new URL('/api/v1/leads/landingv7', base);
+  } catch {
+    return null;
+  }
+}
+
+export function createLandingServer({ root, env = process.env, fetchImpl = fetch }) {
+  const endpoint = crmEndpoint(env.CRM_BACKEND_URL);
+  const apiKey = env.CRM_LANDING_V7_API_KEY?.trim();
   return http.createServer(async (req, res) => {
     const json = (status, body) => {
       res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
@@ -45,9 +88,7 @@ export function createLandingServer({ root, landing, env = process.env, fetchImp
         try { if (new URL(req.headers.origin).host !== req.headers.host) return json(403, { ok: false }); }
         catch { return json(403, { ok: false }); }
       }
-      const endpoint = env.GOOGLE_SHEETS_WEBAPP_URL || '';
-      const token = env.GOOGLE_SHEETS_TOKEN || '';
-      if (!/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(endpoint) || token.length < 32) return json(503, { ok: false, error: 'El formulario está pendiente de configuración.' });
+      if (!endpoint || !apiKey || apiKey.length < 32) return json(503, { ok: false, error: 'El formulario está pendiente de configuración.' });
       let raw = '', bytes = 0;
       const chunks = [];
       try {
@@ -61,16 +102,11 @@ export function createLandingServer({ root, landing, env = process.env, fetchImp
       let lead;
       try { lead = cleanLead(JSON.parse(raw)); }
       catch { return json(400, { ok: false, error: 'Revisa los campos del formulario.' }); }
-      // El origen se establece en el servidor; el navegador no elige la landing.
-      let pagePath = '/';
-      try { const p = new URL(JSON.parse(raw).pageUrl); if (/^https?:$/.test(p.protocol)) pagePath = p.pathname; } catch {}
-      const scheme = req.headers['x-forwarded-proto'] === 'https' ? 'https' : (req.socket.encrypted ? 'https' : 'http');
-      const pageUrl = `${scheme}://${req.headers.host}${pagePath}`.slice(0, 500);
       try {
         const upstream = await fetchImpl(endpoint, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...lead, landing: landing.id, pageUrl, token }),
-          redirect: 'follow', signal: AbortSignal.timeout(25000),
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+          body: JSON.stringify(lead),
+          redirect: 'error', signal: AbortSignal.timeout(25000),
         });
         const saved = upstream.ok ? await upstream.json() : null;
         if (!saved || saved.ok !== true || saved.id !== lead.requestId) throw new Error('not saved');
@@ -97,7 +133,7 @@ export function createLandingServer({ root, landing, env = process.env, fetchImp
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   const root = path.dirname(fileURLToPath(import.meta.url));
   const landing = JSON.parse(await readFile(path.join(root, 'landing.config.json'), 'utf8'));
-  const server = createLandingServer({ root, landing });
+  const server = createLandingServer({ root });
   server.requestTimeout = 30000;
   server.listen(Number(process.env.PORT || 8080), '0.0.0.0', () => console.log(`Landing ${landing.id} lista.`));
   process.on('SIGTERM', () => server.close());
