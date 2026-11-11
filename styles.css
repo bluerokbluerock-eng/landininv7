@@ -331,6 +331,9 @@ nav a:hover {
   content: "";
   mask-image: linear-gradient(to bottom, black, transparent);
 }
+.hero-form {
+  scroll-margin-top: 92px;
+}
 .hero-grid {
   display: grid;
   min-height: 675px;
@@ -599,6 +602,9 @@ nav a:hover {
   font-size: 13px;
   line-height: 1.45;
   padding-top: 22px;
+}
+.form-intro > .primary-cta {
+  margin-top: 26px;
 }
 .privacy-callout .icon {
   flex: 0 0 auto;
@@ -1127,8 +1133,12 @@ footer {
     margin-top: 15px;
     font-size: 15px;
   }
-  .privacy-callout {
-    display: none;
+  .hero-form {
+    scroll-margin-top: 74px;
+  }
+  .form-intro > .primary-cta {
+    width: 100%;
+    margin-top: 24px;
   }
   .lead-form {
     border-radius: 18px;

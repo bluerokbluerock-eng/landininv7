@@ -123,6 +123,274 @@
                 parcial o total del capital.
               </p>
             </div>
+            <div class="hero-form" id="solicitud">
+              <form
+                class="lead-form"
+                aria-label="Solicitud de asesoría financiera"
+                id="lead-form"
+                method="post"
+                action="/api/leads"
+                novalidate=""
+              >
+                <div
+                  class="error-summary"
+                  id="form-error-summary"
+                  role="alert"
+                  tabindex="-1"
+                  hidden=""
+                >
+                  Revisa los campos indicados antes de continuar.
+                </div>
+                <div class="field">
+                  <label for="fullName">Nombre y Apellido</label
+                  ><input
+                    aria-describedby="fullName-error"
+                    autocomplete="name"
+                    id="fullName"
+                    name="name"
+                    required=""
+                    minlength="3"
+                    maxlength="160"
+                    placeholder="Nombre completo"
+                    type="text"
+                    value=""
+                  /><span
+                    class="field-error"
+                    id="fullName-error"
+                    hidden=""
+                  ></span>
+                </div>
+                <div class="field">
+                  <label for="email"
+                    >Correo Electrónico Corporativo o Personal</label
+                  ><input
+                    aria-describedby="email-error"
+                    autocomplete="email"
+                    id="email"
+                    name="email"
+                    required=""
+                    maxlength="254"
+                    inputmode="email"
+                    placeholder="correo@ejemplo.com"
+                    type="email"
+                    value=""
+                  /><span class="field-error" id="email-error" hidden=""></span>
+                </div>
+                <div class="field">
+                  <label for="phone">WhatsApp Directo (Con código de país)</label>
+                  <div class="phone-field">
+                    <label class="sr-only" for="dialCode"
+                      >Prefijo internacional</label
+                    ><select
+                      aria-label="Prefijo internacional"
+                      id="dialCode"
+                      name="dialCode"
+                      autocomplete="tel-country-code"
+                    >
+                      <option value="+54">+54 Argentina</option>
+                      <option value="+591">+591 Bolivia</option>
+                      <option value="+1|CA">+1 Canadá</option>
+                      <option value="+56">+56 Chile</option>
+                      <option value="+57">+57 Colombia</option>
+                      <option value="+506">+506 Costa Rica</option>
+                      <option value="+53">+53 Cuba</option>
+                      <option value="+593">+593 Ecuador</option>
+                      <option value="+503">+503 El Salvador</option>
+                      <option value="+34">+34 España</option>
+                      <option value="+1|US">+1 EE. UU.</option>
+                      <option value="+33">+33 Francia</option>
+                      <option value="+502">+502 Guatemala</option>
+                      <option value="+240">+240 Guinea Ecuatorial</option>
+                      <option value="+504">+504 Honduras</option>
+                      <option value="+39">+39 Italia</option>
+                      <option value="+52" selected="">+52 México</option>
+                      <option value="+505">+505 Nicaragua</option>
+                      <option value="+507">+507 Panamá</option>
+                      <option value="+595">+595 Paraguay</option>
+                      <option value="+51">+51 Perú</option>
+                      <option value="+1|DO">+1 Rep. Dominicana</option>
+                      <option value="+598">+598 Uruguay</option>
+                      <option value="+58">+58 Venezuela</option></select
+                    ><input
+                      aria-describedby="phone-error"
+                      autocomplete="tel-national"
+                      id="phone"
+                      name="phone"
+                      required=""
+                      maxlength="18"
+                      inputmode="tel"
+                      placeholder="000 000 0000"
+                      type="tel"
+                      value=""
+                    />
+                  </div>
+                  <span class="field-error" id="phone-error" hidden=""></span>
+                </div>
+                <div class="field">
+                  <label for="country">País de Residencia</label
+                  ><select
+                    aria-describedby="country-error"
+                    id="country"
+                    name="country"
+                    required=""
+                    autocomplete="country-name"
+                  >
+                    <option value="" selected="">Selecciona tu país</option>
+                    <option>Argentina</option>
+                    <option>Bolivia</option>
+                    <option>Canadá</option>
+                    <option>Chile</option>
+                    <option>Colombia</option>
+                    <option>Costa Rica</option>
+                    <option>Cuba</option>
+                    <option>Ecuador</option>
+                    <option>El Salvador</option>
+                    <option>España</option>
+                    <option>Estados Unidos</option>
+                    <option>Francia</option>
+                    <option>Guatemala</option>
+                    <option>Guinea Ecuatorial</option>
+                    <option>Honduras</option>
+                    <option>Italia</option>
+                    <option>México</option>
+                    <option>Nicaragua</option>
+                    <option>Panamá</option>
+                    <option>Paraguay</option>
+                    <option>Perú</option>
+                    <option>República Dominicana</option>
+                    <option>Uruguay</option>
+                    <option>Venezuela</option></select
+                  ><span class="field-error" id="country-error" hidden=""></span>
+                </div>
+                <div class="field">
+                  <label for="birthDate"
+                    >Fecha de Nacimiento <span>(opcional)</span></label
+                  ><input
+                    aria-describedby="birthDate-error"
+                    autocomplete="bday"
+                    id="birthDate"
+                    name="dob"
+                    min="1900-01-01"
+                    type="date"
+                    value=""
+                  /><span
+                    class="field-error"
+                    id="birthDate-error"
+                    hidden=""
+                  ></span>
+                </div>
+                <div class="consent">
+                  <input
+                    aria-describedby="consent-error"
+                    id="consent"
+                    name="consent"
+                    required=""
+                    type="checkbox"
+                  /><label for="consent"
+                    >Autorizo el tratamiento de mis datos y que me contacten en
+                    relación con esta solicitud.</label
+                  >
+                </div>
+                <span
+                  class="field-error consent-error"
+                  id="consent-error"
+                  hidden=""
+                ></span
+                ><button class="primary-cta submit" type="submit">
+                  <span>SOLICITAR ASESORÍA GRATUITA</span
+                  ><svg
+                    aria-hidden="true"
+                    class="icon"
+                    fill="none"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    width="20"
+                  >
+                    <g
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.8"
+                    >
+                      <path d="M5 12h14"></path>
+                      <path d="m14 7 5 5-5 5"></path>
+                    </g>
+                  </svg>
+                </button>
+                <p class="form-micro">
+                  Solicitar información no implica obligación de invertir.
+                </p>
+                <div
+                  class="submit-error"
+                  id="submit-error"
+                  role="alert"
+                  hidden=""
+                ></div>
+                <noscript>Activa JavaScript para enviar el formulario.</noscript>
+              </form>
+            </div>
+          </div>
+        </section>
+        <section
+          class="form-section"
+          aria-labelledby="analysis-title"
+        >
+          <div class="form-layout">
+            <div class="form-intro">
+              <span class="section-kicker">EVALUACIÓN INICIAL</span>
+              <h2 id="analysis-title">
+                SOLICITA INFORMACIÓN SOBRE NUESTRAS OPCIONES DE INVERSIÓN
+              </h2>
+              <p>
+                Completa tus datos para que nuestro equipo pueda explicarte el
+                servicio, las condiciones y los riesgos.
+              </p>
+              <div class="privacy-callout">
+                <svg
+                  aria-hidden="true"
+                  class="icon"
+                  fill="none"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  width="22"
+                >
+                  <g
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                  >
+                    <path
+                      d="M12 3 4.5 6v5.5c0 4.8 3.2 7.8 7.5 9.5 4.3-1.7 7.5-4.7 7.5-9.5V6z"
+                    ></path>
+                    <path d="m8.5 12 2.2 2.2 4.8-5"></path>
+                  </g></svg
+                ><span
+                  >Tus datos se utilizan únicamente para atender esta
+                  solicitud.</span
+                >
+              </div>
+              <a class="primary-cta" href="#solicitud"
+                ><span>SOLICITAR ASESORÍA GRATUITA</span
+                ><svg
+                  aria-hidden="true"
+                  class="icon"
+                  fill="none"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  width="20"
+                >
+                  <g
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.8"
+                  >
+                    <path d="M5 12h14"></path>
+                    <path d="m14 7 5 5-5 5"></path>
+                  </g></svg
+              ></a>
+            </div>
             <div
               class="market-wrap"
               aria-label="Panel ilustrativo de análisis de mercados"
@@ -206,252 +474,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-        <section
-          class="form-section"
-          id="solicitud"
-          aria-labelledby="form-title"
-        >
-          <div class="form-layout">
-            <div class="form-intro">
-              <span class="section-kicker">EVALUACIÓN INICIAL</span>
-              <h2 id="form-title">
-                SOLICITA INFORMACIÓN SOBRE NUESTRAS OPCIONES DE INVERSIÓN
-              </h2>
-              <p>
-                Completa tus datos para que nuestro equipo pueda explicarte el
-                servicio, las condiciones y los riesgos.
-              </p>
-              <div class="privacy-callout">
-                <svg
-                  aria-hidden="true"
-                  class="icon"
-                  fill="none"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  width="22"
-                >
-                  <g
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.8"
-                  >
-                    <path
-                      d="M12 3 4.5 6v5.5c0 4.8 3.2 7.8 7.5 9.5 4.3-1.7 7.5-4.7 7.5-9.5V6z"
-                    ></path>
-                    <path d="m8.5 12 2.2 2.2 4.8-5"></path>
-                  </g></svg
-                ><span
-                  >Tus datos se utilizan únicamente para atender esta
-                  solicitud.</span
-                >
-              </div>
-            </div>
-            <form
-              class="lead-form"
-              id="lead-form"
-              method="post"
-              action="/api/leads"
-              novalidate=""
-            >
-              <div
-                class="error-summary"
-                id="form-error-summary"
-                role="alert"
-                tabindex="-1"
-                hidden=""
-              >
-                Revisa los campos indicados antes de continuar.
-              </div>
-              <div class="field">
-                <label for="fullName">Nombre y Apellido</label
-                ><input
-                  aria-describedby="fullName-error"
-                  autocomplete="name"
-                  id="fullName"
-                  name="name"
-                  required=""
-                  minlength="3"
-                  maxlength="160"
-                  placeholder="Nombre completo"
-                  type="text"
-                  value=""
-                /><span
-                  class="field-error"
-                  id="fullName-error"
-                  hidden=""
-                ></span>
-              </div>
-              <div class="field">
-                <label for="email"
-                  >Correo Electrónico Corporativo o Personal</label
-                ><input
-                  aria-describedby="email-error"
-                  autocomplete="email"
-                  id="email"
-                  name="email"
-                  required=""
-                  maxlength="254"
-                  inputmode="email"
-                  placeholder="correo@ejemplo.com"
-                  type="email"
-                  value=""
-                /><span class="field-error" id="email-error" hidden=""></span>
-              </div>
-              <div class="field">
-                <label for="phone">WhatsApp Directo (Con código de país)</label>
-                <div class="phone-field">
-                  <label class="sr-only" for="dialCode"
-                    >Prefijo internacional</label
-                  ><select
-                    aria-label="Prefijo internacional"
-                    id="dialCode"
-                    name="dialCode"
-                    autocomplete="tel-country-code"
-                  >
-                    <option value="+54">+54 Argentina</option>
-                    <option value="+591">+591 Bolivia</option>
-                    <option value="+1|CA">+1 Canadá</option>
-                    <option value="+56">+56 Chile</option>
-                    <option value="+57">+57 Colombia</option>
-                    <option value="+506">+506 Costa Rica</option>
-                    <option value="+53">+53 Cuba</option>
-                    <option value="+593">+593 Ecuador</option>
-                    <option value="+503">+503 El Salvador</option>
-                    <option value="+34">+34 España</option>
-                    <option value="+1|US">+1 EE. UU.</option>
-                    <option value="+33">+33 Francia</option>
-                    <option value="+502">+502 Guatemala</option>
-                    <option value="+240">+240 Guinea Ecuatorial</option>
-                    <option value="+504">+504 Honduras</option>
-                    <option value="+39">+39 Italia</option>
-                    <option value="+52" selected="">+52 México</option>
-                    <option value="+505">+505 Nicaragua</option>
-                    <option value="+507">+507 Panamá</option>
-                    <option value="+595">+595 Paraguay</option>
-                    <option value="+51">+51 Perú</option>
-                    <option value="+1|DO">+1 Rep. Dominicana</option>
-                    <option value="+598">+598 Uruguay</option>
-                    <option value="+58">+58 Venezuela</option></select
-                  ><input
-                    aria-describedby="phone-error"
-                    autocomplete="tel-national"
-                    id="phone"
-                    name="phone"
-                    required=""
-                    maxlength="18"
-                    inputmode="tel"
-                    placeholder="000 000 0000"
-                    type="tel"
-                    value=""
-                  />
-                </div>
-                <span class="field-error" id="phone-error" hidden=""></span>
-              </div>
-              <div class="field">
-                <label for="country">País de Residencia</label
-                ><select
-                  aria-describedby="country-error"
-                  id="country"
-                  name="country"
-                  required=""
-                  autocomplete="country-name"
-                >
-                  <option value="" selected="">Selecciona tu país</option>
-                  <option>Argentina</option>
-                  <option>Bolivia</option>
-                  <option>Canadá</option>
-                  <option>Chile</option>
-                  <option>Colombia</option>
-                  <option>Costa Rica</option>
-                  <option>Cuba</option>
-                  <option>Ecuador</option>
-                  <option>El Salvador</option>
-                  <option>España</option>
-                  <option>Estados Unidos</option>
-                  <option>Francia</option>
-                  <option>Guatemala</option>
-                  <option>Guinea Ecuatorial</option>
-                  <option>Honduras</option>
-                  <option>Italia</option>
-                  <option>México</option>
-                  <option>Nicaragua</option>
-                  <option>Panamá</option>
-                  <option>Paraguay</option>
-                  <option>Perú</option>
-                  <option>República Dominicana</option>
-                  <option>Uruguay</option>
-                  <option>Venezuela</option></select
-                ><span class="field-error" id="country-error" hidden=""></span>
-              </div>
-              <div class="field">
-                <label for="birthDate"
-                  >Fecha de Nacimiento <span>(opcional)</span></label
-                ><input
-                  aria-describedby="birthDate-error"
-                  autocomplete="bday"
-                  id="birthDate"
-                  name="dob"
-                  min="1900-01-01"
-                  type="date"
-                  value=""
-                /><span
-                  class="field-error"
-                  id="birthDate-error"
-                  hidden=""
-                ></span>
-              </div>
-              <div class="consent">
-                <input
-                  aria-describedby="consent-error"
-                  id="consent"
-                  name="consent"
-                  required=""
-                  type="checkbox"
-                /><label for="consent"
-                  >Autorizo el tratamiento de mis datos y que me contacten en
-                  relación con esta solicitud.</label
-                >
-              </div>
-              <span
-                class="field-error consent-error"
-                id="consent-error"
-                hidden=""
-              ></span
-              ><button class="primary-cta submit" type="submit">
-                <span>SOLICITAR ASESORÍA GRATUITA</span
-                ><svg
-                  aria-hidden="true"
-                  class="icon"
-                  fill="none"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  width="20"
-                >
-                  <g
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.8"
-                  >
-                    <path d="M5 12h14"></path>
-                    <path d="m14 7 5 5-5 5"></path>
-                  </g>
-                </svg>
-              </button>
-              <p class="form-micro">
-                Solicitar información no implica obligación de invertir.
-              </p>
-              <div
-                class="submit-error"
-                id="submit-error"
-                role="alert"
-                hidden=""
-              ></div>
-              <noscript>Activa JavaScript para enviar el formulario.</noscript>
-            </form>
           </div>
         </section>
         <section class="process" id="como-funciona">
