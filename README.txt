@@ -11,7 +11,7 @@ completa las variables privadas y ejecuta node --env-file=.env server.mjs.
 
 CRM_BACKEND_URL es la URL del servicio crm-api (por ejemplo, http://localhost:3000).
 El servidor envía el formulario a POST /api/v1/leads/landingv7 con la clave
-privada CRM_LANDING_V7_API_KEY, que debe coincidir en ambos servicios. El CRM
+privada CRM_LANDING_API_KEY, que debe coincidir en ambos servicios. El CRM
 asigna los registros al área Sale (2), la campaña 25 y el estado 31.
 Los registros aparecen en Leads Metrics según los permisos del CRM.
 Si falla el envío, el formulario conserva los datos y el
@@ -23,7 +23,7 @@ Si conectas el repositorio landininv7 a Railway, usa la raíz del repositorio
 y /railway.json como archivo de configuración. Si conectas el repositorio
 landings, usa /landingv7 como Root Directory y /landingv7/railway.json como
 archivo de configuración. Configura CRM_BACKEND_URL y
-CRM_LANDING_V7_API_KEY como variables del servicio. El Dockerfile ejecuta
+CRM_LANDING_API_KEY como variables del servicio. El Dockerfile ejecuta
 Node 24 y escucha en PORT, con 8080 por defecto.
 
 Diseño
